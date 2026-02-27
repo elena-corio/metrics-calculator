@@ -8,7 +8,7 @@ def speckle_to_unit(speckle_obj) -> Unit:
     return Unit(
         cluster_id=speckle_obj.properties["cluster_id"],
         level=speckle_obj.properties["level"],
-        name=ProgramType(speckle_obj.properties["program"].title()),
+        program=ProgramType(speckle_obj.properties["program"].title()),
         area=round(speckle_obj.area, 2),
         speckle_type=speckle_obj.speckle_type,
         geometry=speckle_obj
