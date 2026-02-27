@@ -15,7 +15,7 @@ class OpenSpace(ModelElement):
 
 @dataclass
 class Unit (ModelElement):
-    name: ProgramType
+    program: ProgramType
     area: float
 
 @dataclass
