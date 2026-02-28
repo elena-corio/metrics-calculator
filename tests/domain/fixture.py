@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from domain.model.elements import Column, Facade, OpenSpace, Slab, Unit
+from domain.model.elements import Column, Core, Facade, OpenSpace, Slab, Unit
 from domain.model.types import MaterialType, ProgramType, SectionType
 
 def make_unit(level=0.0, program=ProgramType.LIVING, area=50.0):
@@ -47,6 +47,19 @@ def make_slab(area=50.0, thickness=0.2, material=MaterialType.CONCRETE):
  
 def make_column(section=SectionType.CIRCLE,length=3.0, size=0.3, thickness=0.02, material=MaterialType.STEEL):
 	return Column(
+		cluster_id="test_cluster",
+		speckle_type="test_type",
+		geometry=None,
+		level=0.0,
+		material=material,
+		length=length,
+		section=section,
+		size=size,
+		thickness=thickness
+	)
+ 
+def make_core(section=SectionType.BOX,length=3.0, size=0.5, thickness=0.05, material=MaterialType.CONCRETE):
+	return Core(
 		cluster_id="test_cluster",
 		speckle_type="test_type",
 		geometry=None,

@@ -1,22 +1,9 @@
 """
 Calculate carbon efficiency of a building based on its elements and materials.
 """
-import math
+from domain.metrics.area_helper import calculate_section_area
+from domain.model.elements import Core, CurveElement, Facade, MeshElement, ModelElement, Slab, Column
 
-from domain.model.elements import CurveElement, Facade, MeshElement, ModelElement, Slab, Column
-from domain.model.types import SectionType
-
-def calculate_cross_section_area(element: CurveElement) -> float:
-    """
-    Calculate cross-sectional area of a curve element.
-    """
-    if element.section == SectionType.CIRCLE:
-        radius = element.size / 2
-        return math.pi * radius ** 2 - math.pi * (radius - element.thickness) ** 2
-    elif element.section == SectionType.BOX:
-        return element.size**2 - (element.size - element.thickness)**2
-    else:
-        return 0  # Unknown section type
 
 def calculate_volume(element: ModelElement) -> float:
     """
@@ -25,7 +12,7 @@ def calculate_volume(element: ModelElement) -> float:
     if isinstance(element, MeshElement):
         return element.area * element.thickness
     elif isinstance(element, CurveElement):
-        return element.length * calculate_cross_section_area(element)
+        return element.length * calculate_section_area(element)
     else:
         return 0
 
@@ -42,12 +29,12 @@ def calculate_embodied_carbon(element: ModelElement, rulebook: dict) -> float:
     return weight * carbon_factor
     
 
-def calculate_carbon_efficiency(facades: list[Facade], slabs: list[Slab], columns: list[Column], rulebook: dict) -> float:
+def calculate_carbon_efficiency(facades: list[Facade], slabs: list[Slab], columns: list[Column], cores: list[Core], rulebook: dict) -> float:
     """
     Calculate carbon efficiency as total embodied carbon per unit area.
     """
     gross_floor_area = sum(slab.area for slab in slabs)
-    total_embodied_carbon = sum(calculate_embodied_carbon(element, rulebook) for element in facades + slabs + columns)
+    total_embodied_carbon = sum(calculate_embodied_carbon(element, rulebook) for element in facades + slabs + columns + cores)
     target = rulebook["metrics"]["carbon_efficiency"]["target"]
     embodied_carbon_intensity = total_embodied_carbon / gross_floor_area if gross_floor_area > 0 else 0
     return max(0, 1 - embodied_carbon_intensity / target)
