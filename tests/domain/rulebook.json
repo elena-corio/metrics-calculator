@@ -13,10 +13,9 @@
   "material_types": {
     "Concrete": { "is_transparent": false, "density": 2400, "carbon_factor": 0.12 },
     "Steel": { "is_transparent": false, "density": 7850, "carbon_factor": 2.0 },
-    "Timber": { "is_transparent": false, "density": 500, "carbon_factor": 0.05 },
-    "Glass": { "is_transparent": true, "density": 2500, "carbon_factor": 1.0 },
-    "Plastic": { "is_transparent": false, "density": 1200, "carbon_factor": 2.5 },
-    "Composite": { "is_transparent": false,"density": 1800, "carbon_factor": 4.0 }
+    "Timber": { "is_transparent": false, "density": 500, "carbon_factor": 0.5 },
+    "Glass": { "is_transparent": true, "density": 2500, "carbon_factor": 1.6 },
+    "Plastic": { "is_transparent": false, "density": 1200, "carbon_factor": 2.5 }
   },
   "metrics":{
     "daylight_potential": {
@@ -25,7 +24,8 @@
     },
     "green_space_index": {
       "benchmark": 0.80,
-      "formula": "max (0, 1 - distance_to_green / target*)\n*300 m"
+      "target": 300,
+      "formula": "max (0, 1 - distance_to_green / target)"
     },
     "program_diversity_index": {
       "benchmark": 0.75,
@@ -49,7 +49,8 @@
     },
     "carbon_efficiency": {
       "benchmark": 0.50,
-      "formula": "max (0, 1 - embodied_carbon_intensity / target*)\n*600 kgCO2e/kg"
+      "target": 600,
+      "formula": "max (0, 1 - embodied_carbon_intensity / target)"
     }
 }
 }
