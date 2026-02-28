@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from domain.model.elements import Facade, OpenSpace, Slabs, Unit
 from domain.model.types import MaterialType, ProgramType
 
@@ -32,12 +35,18 @@ def make_green(level=0.0, area=100.0):
 	)
 
 def make_slab(area=50.0):
-    return Slabs(
-        cluster_id="test_cluster",
-        speckle_type="test_type",
-        geometry=None,
-        level=0.0,
-        material=MaterialType.CONCRETE,
+	return Slabs(
+		cluster_id="test_cluster",
+		speckle_type="test_type",
+		geometry=None,
+		level=0.0,
+		material=MaterialType.CONCRETE,
         area=area,
         thickness=0.3
     )
+ 
+def load_rulebook():
+    rulebook_path = Path(__file__).parent / "rulebook.json"
+    with open(rulebook_path) as f:
+        return json.load(f)
+
