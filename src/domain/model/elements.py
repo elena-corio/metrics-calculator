@@ -33,13 +33,14 @@ class CurveElement(ModelElement):
     length: float
     section: SectionType
     size: float
+    thickness: float
     
 @dataclass
 class Facade(MeshElement):
     pass
     
 @dataclass
-class Slabs(MeshElement):
+class Slab(MeshElement):
     pass
     
 @dataclass
@@ -53,9 +54,9 @@ class Column(CurveElement):
 @dataclass
 class Model:
     facades: list[Facade]
-    #slabs: list[Slabs]
+    slabs: list[Slab]
     #cores: list[Core]
-    #columns: list[Column]
+    columns: list[Column]
     units: list[Unit]
     open_spaces: list[OpenSpace]
     levels: list[float]
