@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from domain.model.elements import Column, Core, Facade, OpenSpace, Slab, Unit
+from domain.model.elements import Column, Core, Facade, OpenSpace, Slab, Unit, Volume
 from domain.model.types import MaterialType, ProgramType, SectionType
 
 def make_unit(level=0.0, program=ProgramType.LIVING, area=50.0):
@@ -21,6 +21,15 @@ def make_green(level=0.0, area=100.0):
 		geometry=None,
 		level=level,
 		area=area
+	)
+ 
+def make_volume(level=0.0, volume=1000.0):
+	return Volume(
+		cluster_id="v1",
+		speckle_type="Volume",
+		geometry=None,
+		level=level,
+		volume=volume
 	)
  
 def make_facade(area=50.0, thickness=0.05, material=MaterialType.GLASS):

@@ -13,6 +13,10 @@ class ModelElement:
     level: float
     
 @dataclass
+class Volume(ModelElement):
+    volume: float
+    
+@dataclass
 class OpenSpace(ModelElement):
     area: float
 
@@ -55,9 +59,10 @@ class Column(CurveElement):
 class Model:
     facades: list[Facade]
     slabs: list[Slab]
-    #cores: list[Core]
+    cores: list[Core]
     columns: list[Column]
     units: list[Unit]
     open_spaces: list[OpenSpace]
+    volumes: list[Volume]
     levels: list[float]
     clusters: list[str]

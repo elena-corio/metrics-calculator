@@ -43,7 +43,7 @@
       "benchmark": 0.85,
       "formula": "net_floor_area / gross_floor_area"
     },
-    "surface_to_volume_ratio": {
+    "volume_to_envelope_ratio": {
       "benchmark": 0.60,
       "formula": "building_volume / envelope_area"
     },
