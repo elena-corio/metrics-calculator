@@ -1,7 +1,7 @@
 """
 Calculate daylight potential based on window area and floor area.
 """
-
+import logging
 from domain.model.elements import Facade, Unit
 from domain.model.types import MaterialType
 
@@ -9,7 +9,11 @@ def _is_transparent(material: MaterialType, rulebook: dict) -> bool:
     """
     Check if a material is transparent based on the rulebook.
     """
-    return rulebook["material_types"].get(material.value, {}).get("is_transparent", False)
+    material_rule = rulebook["material_types"].get(material.value)
+    if material_rule is None:
+        logging.warning(f"Material '{material.value}' not found in rulebook.")
+        return False
+    return material_rule.get("is_transparent", False)
 
 def get_window_area(facades: list[Facade], rulebook: dict) -> float:
     """

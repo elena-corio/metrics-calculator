@@ -9,6 +9,12 @@ RULEBOOK = load_rulebook()
 def test_is_transparent():
     assert _is_transparent(MaterialType.GLASS, RULEBOOK) is True
     assert _is_transparent(MaterialType.CONCRETE, RULEBOOK) is False
+    
+def test_is_transparent_missing_material():
+    rulebook = load_rulebook()
+    # Remove GLASS from rulebook
+    rulebook["material_types"].pop("Glass", None)
+    assert _is_transparent(MaterialType.GLASS, rulebook) is False
 
 def test_get_window_area_only_glass():
     facades = [

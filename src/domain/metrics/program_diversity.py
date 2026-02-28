@@ -6,7 +6,7 @@ from domain.model.elements import Unit
 
 # program_i_units_count	= count(program_i_units)
 # program_i_frequencies	= Sum(program_i_units_count) **2
-# porgram_diversity_index = 1 - program_frequencies / (program_units_count**2)
+# program_diversity_index = 1 - program_frequencies / (program_units_count**2)
 
 def count_programs(units: list[Unit]) -> dict[str, int]:
     """
