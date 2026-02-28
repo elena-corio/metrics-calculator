@@ -7,26 +7,7 @@ from domain.metrics.green_space_index import (
 )
 from domain.model.elements import OpenSpace, Unit
 from domain.model.types import ProgramType
-
-
-def make_unit(level: float, name=ProgramType.LIVING, area=50.0):
-	return Unit(
-		cluster_id="c1",
-		speckle_type="Unit",
-		geometry=None,
-		level=level,
-		name=name,
-		area=area
-	)
-
-def make_green(level: float, area=100.0):
-	return OpenSpace(
-		cluster_id="g1",
-		speckle_type="OpenSpace",
-		geometry=None,
-		level=level,
-		area=area
-	)
+from fixture import make_unit, make_green
 
 def test_get_distance_to_nearest_green_none():
 	unit = make_unit(9.0)
