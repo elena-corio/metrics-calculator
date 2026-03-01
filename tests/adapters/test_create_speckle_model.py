@@ -17,7 +17,7 @@ def sample_model():
     return make_model(volumes=volumes)
 
 def test_create_base(sample_model):
-    base = create_base("TestBase", sample_model, {"foo": "bar"})
+    base = create_base("TestBase", sample_model, {"foo": "bar"}, rulebook={})
     assert isinstance(base, Base)
     assert base.name == "TestBase"
     assert base["properties"]["foo"] == "bar"
@@ -27,14 +27,14 @@ def test_create_base(sample_model):
 def test_create_element(sample_model):
     # Use first volume as ModelElement
     element = sample_model.volumes[0]
-    result = create_element(element, "TestElement", sample_model, {"baz": 42})
+    result = create_element(element, "TestElement", sample_model, {"baz": 42}, rulebook={})
     assert hasattr(result, "name")
     assert result.name == "TestElement"
     assert result["properties"]["baz"] == 42
     assert isinstance(result["metrics"], dict)
 
 def test_model_to_speckle(sample_model):
-    speckle_model = model_to_speckle(sample_model)
+    speckle_model = model_to_speckle(sample_model, rulebook={})
     assert isinstance(speckle_model, Base)
     assert hasattr(speckle_model, "elements")
     assert len(speckle_model.elements) == 2  # clusters A and B
