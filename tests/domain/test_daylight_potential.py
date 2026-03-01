@@ -1,8 +1,9 @@
-from fixture import load_rulebook, make_facade, make_unit
+from domain.model.fixture import  make_facade, make_unit
 from domain.metrics.daylight_potential import (
     _is_transparent, get_window_area, calculate_daylight_potential
     )
 from domain.model.types import MaterialType
+from loader import load_rulebook
 
 RULEBOOK = load_rulebook()
 

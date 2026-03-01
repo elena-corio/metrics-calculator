@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from domain.model.elements import ModelElement
-from adapters.receive_data import map_elements_by_collection, receive_and_convert_data
+from adapters.create_domain_model import map_elements_by_collection, speckle_to_model
 
 class DummyCollection:
     def __init__(self, name, elements):
@@ -37,18 +37,18 @@ def test_receive_data_with_magicmock():
         DummyCollection("UNITS", [DummyElement(6)]),
         DummyCollection("VOLUMES", [DummyElement(7)]),
     ])
-    with patch("adapters.receive_data.operations.receive", return_value=dummy_data) as mock_receive, \
-         patch("adapters.receive_data.speckle_to_column", side_effect=lambda e: e.value + 1), \
-         patch("adapters.receive_data.speckle_to_core", side_effect=lambda e: e.value + 2), \
-         patch("adapters.receive_data.speckle_to_facade", side_effect=lambda e: e.value + 3), \
-         patch("adapters.receive_data.speckle_to_open_space", side_effect=lambda e: e.value + 4), \
-         patch("adapters.receive_data.speckle_to_slab", side_effect=lambda e: e.value + 5), \
-         patch("adapters.receive_data.speckle_to_unit", side_effect=lambda e: e.value + 6), \
-         patch("adapters.receive_data.speckle_to_volume", side_effect=lambda e: e.value + 7):
+    with patch("adapters.create_domain_model.operations.receive", return_value=dummy_data) as mock_receive, \
+         patch("adapters.create_domain_model.speckle_to_column", side_effect=lambda e: e.value + 1), \
+         patch("adapters.create_domain_model.speckle_to_core", side_effect=lambda e: e.value + 2), \
+         patch("adapters.create_domain_model.speckle_to_facade", side_effect=lambda e: e.value + 3), \
+         patch("adapters.create_domain_model.speckle_to_open_space", side_effect=lambda e: e.value + 4), \
+         patch("adapters.create_domain_model.speckle_to_slab", side_effect=lambda e: e.value + 5), \
+         patch("adapters.create_domain_model.speckle_to_unit", side_effect=lambda e: e.value + 6), \
+         patch("adapters.create_domain_model.speckle_to_volume", side_effect=lambda e: e.value + 7):
         mock_version = MagicMock()
         mock_version.referenced_object = "mock_object_id"
         mock_transport = MagicMock()
-        model = receive_and_convert_data(mock_version, mock_transport)
+        model = speckle_to_model(mock_version, mock_transport)
         mock_receive.assert_called_once_with("mock_object_id", mock_transport)
         assert model.columns == [2]
         assert model.cores == [4]

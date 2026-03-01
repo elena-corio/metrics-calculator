@@ -1,8 +1,9 @@
 import pytest
 
-from fixture import load_rulebook, make_unit
+from domain.model.fixture import  make_unit
 from domain.metrics.usable_area_ratio import _is_usable, calculate_usable_area, calculate_usable_area_ratio
 from domain.model.types import ProgramType
+from loader import load_rulebook
 
 RULEBOOK = load_rulebook()
 

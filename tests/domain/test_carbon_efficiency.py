@@ -2,12 +2,13 @@ import pytest
 
 from domain.metrics.area_helper import calculate_section_area
 from domain.model.types import MaterialType, SectionType
-from fixture import load_rulebook, make_core, make_facade, make_slab, make_column
+from domain.model.fixture import make_core, make_facade, make_slab, make_column
 from domain.metrics.carbon_efficiency import (
     calculate_volume,
     calculate_embodied_carbon,
     calculate_carbon_efficiency,
 )
+from loader import load_rulebook
 
 RULEBOOK = load_rulebook()
 

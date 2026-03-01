@@ -1,5 +1,5 @@
 from domain.model.types import SectionType
-from fixture import make_column, make_core, make_slab
+from domain.model.fixture import make_column, make_core, make_slab
 from domain.metrics.net_floor_area_ratio import (
     calculate_structural_area,
     calculate_net_floor_area_ratio,

@@ -1,5 +1,5 @@
 import pytest
-from fixture import make_unit
+from domain.model.fixture import make_unit
 from domain.metrics.circulation_efficiency import calculate_circulation_efficiency
 from domain.model.types import ProgramType
 

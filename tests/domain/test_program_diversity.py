@@ -1,4 +1,4 @@
-from fixture import make_unit
+from domain.model.fixture import make_unit
 from domain.metrics.program_diversity import calculate_program_diversity_index
 from domain.model.types import ProgramType
 

@@ -1,5 +1,5 @@
 import pytest
-from fixture import make_volume, make_facade
+from domain.model.fixture import make_volume, make_facade
 from domain.metrics.volume_to_envelope import calculate_volume_to_envelope_ratio
 
 def test_volume_to_envelope_ratio_normal():
