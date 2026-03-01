@@ -1,9 +1,7 @@
 import pytest
 from domain.metrics.all_metrics import calculate_metrics
 from domain.model.fixture import make_model, make_unit, make_facade, make_open_space, make_column, make_core, make_slab, make_volume
-
-def dummy_rulebook():
-    return {}  
+from loader import load_rulebook
 
 @pytest.fixture
 def sample_model():
@@ -16,9 +14,10 @@ def sample_model():
     volumes = [make_volume() for _ in range(2)]
     return make_model(columns, cores, facades, open_spaces, slabs, units, volumes)
 
+RULEBOOK = load_rulebook()
+
 def test_calculate_metrics(sample_model):
-    rulebook = dummy_rulebook()
-    metrics = calculate_metrics(sample_model, rulebook)
+    metrics = calculate_metrics(sample_model, RULEBOOK)
     assert isinstance(metrics, dict)
     expected_keys = [
         "daylight_potential",
