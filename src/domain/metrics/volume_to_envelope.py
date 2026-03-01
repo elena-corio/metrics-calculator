@@ -10,4 +10,4 @@ def calculate_volume_to_envelope_ratio(volumes: list[Volume], facades: list[Faca
     """
     total_volume = sum(volume.volume for volume in volumes)
     envelope_area = sum(facade.area for facade in facades)
-    return total_volume / envelope_area if envelope_area > 0 else 0
+    return total_volume / (envelope_area * 10) if envelope_area > 0 else 0

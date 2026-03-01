@@ -16,33 +16,33 @@ def calculate_metrics(model: Model, rulebook: dict) -> dict:
     return {
     "daylight_potential": {
       "benchmark": 0.25,
-      "value": calculate_daylight_potential(model.units, model.facades, rulebook)
+      "value": round(calculate_daylight_potential(model.units, model.facades, rulebook),2)
     },
     "green_space_index": {
-      "benchmark": 0.80,
-      "value": calculate_green_space_index_avg(model.units, model.open_spaces, target=300.0)
+      "benchmark": 0.75,
+      "value": round(calculate_green_space_index_avg(model.units, model.open_spaces, target=250.0),2)
     },
     "program_diversity_index": {
       "benchmark": 0.75,
-      "value": calculate_program_diversity_index(model.units)
+      "value": round(calculate_program_diversity_index(model.units),2)
     },
     "circulation_efficiency": {
       "benchmark": 0.75,
-      "value": calculate_circulation_efficiency(model.units)
+      "value": round(calculate_circulation_efficiency(model.units),2)
     },
     "usable_area_ratio": {
-      "benchmark": 0.70,
-      "value": calculate_usable_area_ratio(model.units, rulebook)
+      "benchmark": 0.75,
+      "value": round(calculate_usable_area_ratio(model.units, rulebook),2)
     },
     "net_floor_area_ratio": {
       "benchmark": 0.85,
-      "value": calculate_net_floor_area_ratio(model.columns, model.cores, model.slabs)
+      "value": round(calculate_net_floor_area_ratio(model.columns, model.cores, model.slabs),2)
     },
     "volume_to_envelope_ratio": {
-      "benchmark": 0.60,
-      "value": calculate_volume_to_envelope_ratio(model.volumes, model.facades)
+      "benchmark": 1.25,
+      "value": round(calculate_volume_to_envelope_ratio(model.volumes, model.facades),2)
     },
     "carbon_efficiency": {
-      "benchmark": 0.50,
-      "value": calculate_carbon_efficiency(model.facades, model.slabs, model.columns, model.cores, rulebook, target=600.0)
+      "benchmark": 0.75,
+      "value": round(calculate_carbon_efficiency(model.facades, model.slabs, model.columns, model.cores, rulebook, target=500.0),2)
     }}
