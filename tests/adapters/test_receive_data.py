@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from domain.model.elements import ModelElement
-from adapters.receive_data import map_elements_by_collection, receive_data
+from adapters.receive_data import map_elements_by_collection, receive_and_convert_data
 
 class DummyCollection:
     def __init__(self, name, elements):
@@ -48,7 +48,7 @@ def test_receive_data_with_magicmock():
         mock_version = MagicMock()
         mock_version.referenced_object = "mock_object_id"
         mock_transport = MagicMock()
-        model = receive_data(mock_version, mock_transport)
+        model = receive_and_convert_data(mock_version, mock_transport)
         mock_receive.assert_called_once_with("mock_object_id", mock_transport)
         assert model.columns == [2]
         assert model.cores == [4]

@@ -24,7 +24,7 @@ def map_elements_by_collection(
         raise ValueError(f"Collection '{collection_name}' not found in data.elements")
     return [map_function(element) for element in elements_collection.elements]
 
-def receive_data(version, transport):
+def receive_and_convert_data(version, transport):
     """
     Receive data from Speckle and convert it to domain model.
     """
