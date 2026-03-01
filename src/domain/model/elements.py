@@ -57,12 +57,10 @@ class Column(CurveElement):
 
 @dataclass
 class Model:
-    facades: list[Facade]
-    slabs: list[Slab]
-    cores: list[Core]
     columns: list[Column]
-    units: list[Unit]
+    cores: list[Core]
+    facades: list[Facade]
     open_spaces: list[OpenSpace]
+    slabs: list[Slab]
+    units: list[Unit]
     volumes: list[Volume]
-    levels: list[float]
-    clusters: list[str]
