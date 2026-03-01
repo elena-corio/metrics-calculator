@@ -1,16 +1,21 @@
 """
-Calculate net floor area ratio for a list of units and slabs.
+Calculate net floor area ratio given lists of structural elements.
 """
+from domain.metrics.area_helper import calculate_section_area
+from domain.model.elements import Column, Core, CurveElement, Slab
 
-from domain.model.elements import Slabs, Unit
-
-# Note: it can also be calculated as slab area - core area - column area
-# so it only depedns on structural model
-def calculate_net_floor_area_ratio(units: list[Unit], slabs: list[Slabs]) -> float:
+def calculate_structural_area(elements: list[CurveElement]) -> float:
     """
-    Calculate net floor area ratio for a list of units.
+    Calculate total area of vertical structural elements (columns and cores).
+    """
+    return sum(calculate_section_area(element) for element in elements)
+
+def calculate_net_floor_area_ratio(columns: list[Column], cores: list[Core], slabs: list[Slab]) -> float:
+    """
+    Calculate net floor area ratio given slabs and vertical structural elements.
 
     """
-    total_unit_area = sum(unit.area for unit in units)
-    total_slab_area = sum(slab.area for slab in slabs)
-    return total_unit_area / total_slab_area if total_slab_area > 0 else 0
+    gross_floor_area = sum(slab.area for slab in slabs)
+    structural_area = calculate_structural_area(columns + cores)
+    net_floor_area = gross_floor_area - structural_area
+    return net_floor_area / gross_floor_area if gross_floor_area > 0 else 0

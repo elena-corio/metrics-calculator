@@ -11,23 +11,23 @@ def test_is_transparent():
     assert _is_transparent(MaterialType.CONCRETE, RULEBOOK) is False
     
 def test_is_transparent_missing_material():
-    rulebook = load_rulebook()
+    rulebook = load_rulebook().copy()
     # Remove GLASS from rulebook
     rulebook["material_types"].pop("Glass", None)
     assert _is_transparent(MaterialType.GLASS, rulebook) is False
 
 def test_get_window_area_only_glass():
     facades = [
-        make_facade(10, MaterialType.GLASS),
-        make_facade(20, MaterialType.CONCRETE),
-        make_facade(15, MaterialType.GLASS)
+        make_facade(area=10, material=MaterialType.GLASS),
+        make_facade(area=20, material=MaterialType.CONCRETE),
+        make_facade(area=15, material=MaterialType.GLASS)
     ]
     assert get_window_area(facades, RULEBOOK) == 25
 
 def test_get_window_area_no_glass():
     facades = [
-        make_facade(10, MaterialType.CONCRETE),
-        make_facade(20, MaterialType.STEEL)
+        make_facade(area=10, material=MaterialType.CONCRETE),
+        make_facade(area=20, material=MaterialType.STEEL)
     ]
     assert get_window_area(facades, RULEBOOK) == 0
 
