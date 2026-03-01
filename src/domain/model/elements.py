@@ -64,3 +64,9 @@ class Model:
     slabs: list[Slab]
     units: list[Unit]
     volumes: list[Volume]
+    
+    def cluster_ids(self):
+        return sorted(set(v.cluster_id for v in self.volumes))
+
+    def levels_for_cluster(self, cluster_id):
+        return sorted(set(v.level for v in self.volumes if v.cluster_id == cluster_id))
