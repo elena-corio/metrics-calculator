@@ -1,3 +1,4 @@
+from specklepy.api import operations
 from config import AUTHORS, FUNCTION, SOURCE_MODEL_ID
 from domain.metrics.all_metrics import calculate_metrics
 from domain.model.elements import Model, ModelElement
@@ -62,3 +63,8 @@ def model_to_speckle(model: Model, rulebook: dict):
         speckle_model.elements.append(cluster_base)
 
     return speckle_model
+
+def create_and_send_speckle_model(model: Model, rulebook: dict, transport):
+    speckle_model = model_to_speckle(model, rulebook)
+    object_id = operations.send(base=speckle_model, transports=[transport])
+    return object_id
