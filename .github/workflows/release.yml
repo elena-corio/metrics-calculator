@@ -1,0 +1,26 @@
+name: Release Automate Contract
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install uv
+        run: pip install uv
+      - name: Sync dependencies
+        run: uv sync
+      - name: Build Docker image
+        run: docker build -t speckle-automate-contract .
+      - name: Publish Docker image
+        run: echo "Publishing step here (add registry details)"
+        # Add registry login and push steps as needed

@@ -1,81 +1,83 @@
+
 # digital-tissue-automate
 
-Automated function for fetching latest version of a model, calculate metrics and send them to a new model.
+Automated function for fetching the latest version of a model, calculating KPIs, and sending results to a new model via Speckle Automate.
 
-## Reference
-### KPIs Structure
+## KPIs Structure
 
-1. **Liveability** - Capacity to support everyday wellbeing
-   - Daylight Potential
-   - Green Space Index
+1. **Liveability**: Daylight Potential, Green Space Index
+2. **Interconnection**: Program Diversity Index, Circulation Efficiency
+3. **Adaptability**: Occupancy Efficiency, Net Floor Area Ratio
+4. **Sustainability**: Envelope Efficiency, Carbon Efficiency
 
-2. **Interconnection** - Connections between people and programs
-   - Program Diversity Index
-   - Circulation Efficiency
-
-3. **Adaptability** - Capacity of spaces to transform
-   - Occupancy Efficiency
-   - Net Floor Area Ratio
-
-4. **Sustainability** - Environmental performance
-   - Envelope Efficiency
-   - Carbon Efficiency
-
-## Setup
+## Setup & Installation
 
 ### Prerequisites
+- Python 3.10+
+- [uv](https://github.com/astral-sh/uv) (recommended for dependency management)
+- Docker (for containerized deployment)
 
-- [uv](https://github.com/astral-sh/uv)
-- Python 3.8+
-
-### Installation
-
-1. **Clone the repository:**
-   ```
-   git clone <your-repo-url>
-   ```
-
-2. **Install dependencies:**
-   ```
-   pip install uv
-   ```
-   ```
-   uv sync
-   ```
-
-3. **Set environment variables**  
-   (recommended: create a `.env` file in the project root):
-   ```
-   WORKSPACE_ID=your_workspace_id
-   PROJECT_ID=your_project_id
-   SOURCE_MODEL=your_source_model
-   TARGET_MODEL=your_target_model
-   ```
-    For authentication, the `.env` file must include:
-    - `SPECKLE_TOKEN="your_token"`
-    - `SPECKLE_SERVER=https://app.speckle.systems`
-
-   You can test authentication by running the `get_client.py` file:
-   ```
-   uv python src/adapters/get_client.py
-   
-### Running the Project
-
-To run the main script:
+### Install dependencies
+```bash
+uv sync
 ```
+If you previously used Poetry, you can migrate dependencies to `pyproject.toml` and use `uv sync`.
+
+### Environment Variables
+Create a `.env` file in the project root:
+```
+WORKSPACE_ID=your_workspace_id
+PROJECT_ID=your_project_id
+SOURCE_MODEL=your_source_model
+TARGET_MODEL=your_target_model
+SPECKLE_TOKEN="your_token"
+SPECKLE_SERVER=https://app.speckle.systems
+```
+
+## Commands
+
+### Run main script
+```bash
 python src/main.py
 ```
-### Running the tests
 
-To run the main script:
+### Run as Speckle Automate contract
+```bash
+python src/main.py '<automation_context_json>' '<function_inputs_json>' <token>
 ```
+
+### Run tests
+```bash
 uv pip install -e .
 pytest
 ```
-### Linting the files
-```
+
+### Lint code
+```bash
 pylint --rcfile=pylintrc src
 pylint --rcfile=tests/pylintrc tests
 ```
+
+## Docker Usage
+
+### Build Docker image
+```bash
+docker build -t digital-tissue-automate .
+```
+
+### Run Docker container (Speckle Automate contract)
+```bash
+docker run --rm digital-tissue-automate \
+   python src/main.py '<automation_context_json>' '<function_inputs_json>' <token>
+```
+
+## Deployment & Automation
+
+- To deploy as a Speckle Automate function, publish a GitHub release and ensure your Docker image is built and pushed to your registry (see `.github/workflows/release.yml`).
+- Register your function at [Speckle Automate](https://automate.speckle.dev/).
+
+## Resources
+- [SpecklePy Guide](https://speckle.guide/dev/python.html)
+- [Speckle Automate](https://automate.speckle.dev/)
 
 
