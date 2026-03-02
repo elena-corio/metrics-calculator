@@ -1,0 +1,30 @@
+# Documentation
+CLAUDE.md
+README.md
+LICENSE
+
+# Git
+.git
+.gitignore
+
+# GitHub
+.github
+
+# IDE / Dev tools
+.devcontainer
+.vscode
+.env
+.env.example
+
+# Testing
+tests
+example.function_inputs.json
+
+# Python artifacts
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.venv
+venv
