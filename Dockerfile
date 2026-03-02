@@ -4,8 +4,8 @@ FROM python:3.13-slim
 # We set the working directory to be the /home/speckle directory; all of our files will be copied here.
 WORKDIR /home/speckle
 
-# Copy pyproject.toml and other config files first to leverage Docker layer caching
-COPY pyproject.toml pytest.ini /home/speckle/
+# Copy pyproject.toml first
+COPY pyproject.toml /home/speckle/
 
 # Copy src directory (required for pip install with setuptools)
 COPY src /home/speckle/src
