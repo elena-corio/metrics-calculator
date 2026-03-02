@@ -43,14 +43,14 @@ SPECKLE_AUTOMATION_ID=your_test_automation_id
 
 ## Commands
 
-### Run main script
+### Run main script (will not work with speckle automate)
 ```bash
-python src/main.py
+python main.py
 ```
 
 ### Run as Speckle Automate contract
 ```bash
-python src/main.py '<automation_context_json>' '<function_inputs_json>' <token>
+python main.py '<automation_context_json>' '<function_inputs_json>' <token>
 ```
 
 ### Run tests
