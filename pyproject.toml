@@ -1,21 +1,28 @@
 [project]
-name = "speckle-automate-function"
+name = "digital-tissue-automate"
 version = "0.1.0"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 authors = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
 maintainers = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
 description = "A Speckle Automate function template using specklepy"
 readme = "README.md"
 license = "Apache-2.0"
 keywords = ["speckle", "automate", "bim", "aec"]
-
-dependencies = ["specklepy==3.2.4"]
+dependencies = [
+    "specklepy>=3.2.4",
+    "pydantic>=2.6.0",
+    "python-dotenv>=1.0.0"
+]
 
 [project.optional-dependencies]
 dev = [
-    "mypy==1.19.1",
-    "pytest==7.4.4",
+    "mypy==1.13.0",
     "ruff==0.15.4",
+    "dotenv>=0.9.9",
+    "gql>=3.5.3",
+    "pylint>=4.0.5",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=0.23.0",
 ]
 
 [tool.ruff]
@@ -35,3 +42,6 @@ convention = "google"
 
 [tool.setuptools]
 py-modules = []
+
+[tool.setuptools.packages.find]
+where = ["src"]

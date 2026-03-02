@@ -1,0 +1,20 @@
+{
+  "program_types": {
+    "Living": { "is_green": false, "is_usable": true },
+    "Working": { "is_green": false, "is_usable": true },
+    "Learning": { "is_green": false, "is_usable": true },
+    "Commerce": { "is_green": false, "is_usable": true },
+    "Leisure": { "is_green": false, "is_usable": true },
+    "Health": { "is_green": false, "is_usable": true },
+    "Community": { "is_green": true, "is_usable": true },
+    "Circulation": { "is_green": false, "is_usable": false},
+    "Support": { "is_green": false, "is_usable": false }
+  },
+  "material_types": {
+    "Concrete": { "is_transparent": false, "density": 2400, "carbon_factor": 0.12 },
+    "Steel": { "is_transparent": false, "density": 7850, "carbon_factor": 2.0 },
+    "Timber": { "is_transparent": false, "density": 500, "carbon_factor": 0.5 },
+    "Glass": { "is_transparent": true, "density": 2500, "carbon_factor": 1.6 },
+    "Plastic": { "is_transparent": false, "density": 1200, "carbon_factor": 2.5 }
+  }
+}
