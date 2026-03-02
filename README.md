@@ -18,10 +18,17 @@ Automated function for fetching the latest version of a model, calculating KPIs,
 - Docker (for containerized deployment)
 
 ### Install dependencies
+
+Using **uv** (recommended):
 ```bash
 uv sync
 ```
 If you previously used Poetry, you can migrate dependencies to `pyproject.toml` and use `uv sync`.
+
+Using **pip** (alternative):
+```bash
+pip install -e ".[dev]"
+```
 
 ### Environment Variables
 Create a `.env` file in the project root:
@@ -73,7 +80,7 @@ docker run --rm digital-tissue-automate \
 
 ## Deployment & Automation
 
-- To deploy as a Speckle Automate function, publish a GitHub release and ensure your Docker image is built and pushed to your registry (see `.github/workflows/release.yml`).
+- To deploy as a Speckle Automate function, publish a GitHub release and ensure your Docker image is built and pushed to your registry (see `.github/workflows/main.yml`).
 - Register your function at [Speckle Automate](https://automate.speckle.dev/).
 
 ## Resources
