@@ -3,6 +3,12 @@
 Use the automation_context module to wrap your function in an Automate context helper.
 """
 
+import sys
+import os
+
+# Add src directory to Python path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
 from pydantic import Field, SecretStr
 from speckle_automate import (
     AutomateBase,
