@@ -1,10 +1,16 @@
 """
-Ids of the workspace, project, source model and target model in the IAAC Collaborative Platform"""
+Load configuration from environment variables
+"""
+import os
+from dotenv import load_dotenv
 
-WORKSPACE_ID = "a1cd06bae2"
-PROJECT_ID = "dcca94731b"
-SOURCE_MODEL_ID = "827526cd48"
-TARGET_MODEL_ID = "a17c364985"
+# Load .env file
+load_dotenv()
+
+WORKSPACE_ID = os.getenv("SPECKLE_WORKSPACE_ID", "a1cd06bae2")
+PROJECT_ID = os.getenv("SPECKLE_PROJECT_ID", "dcca94731b")
+SOURCE_MODEL_ID = os.getenv("SPECKLE_SOURCE_MODEL_ID", "827526cd48")
+TARGET_MODEL_ID = os.getenv("SPECKLE_TARGET_MODEL_ID", "a17c364985")
 
 AUTHORS = ["Elena Corio, Symon Kipkemei"]
 FUNCTION = "digital-tissue-automate"
