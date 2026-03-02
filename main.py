@@ -9,101 +9,36 @@ import os
 # Add src directory to Python path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from pydantic import Field, SecretStr
 from speckle_automate import (
-    AutomateBase,
     AutomationContext,
     execute_automate_function,
 )
 
-from flatten import flatten_base
+from application.run_application import run_application
 
 
-class FunctionInputs(AutomateBase):
-    """These are function author-defined values.
-
-    Automate will make sure to supply them matching the types specified here.
-    Please use the pydantic model schema to define your inputs:
-    https://docs.pydantic.dev/latest/usage/models/
-    """
-
-    # An example of how to use secret values.
-    whisper_message: SecretStr = Field(title="This is a secret message")
-    forbidden_speckle_type: str = Field(
-        title="Forbidden speckle type",
-        description=(
-            "If a object has the following speckle_type,"
-            " it will be marked with an error."
-        ),
-    )
-
-
-def automate_function(
-    automate_context: AutomationContext,
-    function_inputs: FunctionInputs,
-) -> None:
-    """This is an example Speckle Automate function.
+def automate_function(automate_context: AutomationContext) -> None:
+    """Speckle Automate function for calculating KPI metrics.
+    
+    Fetches the latest version of a model, calculates KPIs (Daylight Potential, 
+    Green Space Index, Program Diversity, etc.), and sends results to a new model.
 
     Args:
         automate_context: A context-helper object that carries relevant information
             about the runtime context of this function.
             It gives access to the Speckle project data that triggered this run.
-            It also has convenient methods for attaching results to the Speckle model.
-        function_inputs: An instance object matching the defined schema.
     """
-    # The context provides a convenient way to receive the triggering version.
-    version_root_object = automate_context.receive_version()
-
-    objects_with_forbidden_speckle_type = [
-        b
-        for b in flatten_base(version_root_object)
-        if b.speckle_type == function_inputs.forbidden_speckle_type
-    ]
-    count = len(objects_with_forbidden_speckle_type)
-
-    if count > 0:
-        # This is how a run is marked with a failure cause.
-        automate_context.attach_error_to_objects(
-            category="Forbidden speckle_type"
-            f" ({function_inputs.forbidden_speckle_type})",
-            affected_objects=objects_with_forbidden_speckle_type,
-            message="This project should not contain the type: "
-            f"{function_inputs.forbidden_speckle_type}",
-        )
-        automate_context.mark_run_failed(
-            "Automation failed: "
-            f"Found {count} object that have one of the forbidden speckle types: "
-            f"{function_inputs.forbidden_speckle_type}"
-        )
-
-        # Set the automation context view to the original model/version view
-        # to show the offending objects.
-        automate_context.set_context_view()
-
-    else:
-        automate_context.mark_run_success("No forbidden types found.")
-
-    # If the function generates file results, this is how it can be
-    # attached to the Speckle project/model
-    # automate_context.store_file_result("./report.pdf")
-
-
-def automate_function_without_inputs(automate_context: AutomationContext) -> None:
-    """A function example without inputs.
-
-    If your function does not need any input variables,
-     besides what the automation context provides,
-     the inputs argument can be omitted.
-    """
-    pass
+    try:
+        run_application(automate_context)
+        automate_context.mark_run_success("Metrics calculated and sent successfully.")
+    except Exception as e:
+        automate_context.mark_run_failed(f"Error calculating metrics: {str(e)}")
+        raise
 
 
 # make sure to call the function with the executor
 if __name__ == "__main__":
     # NOTE: always pass in the automate function by its reference; do not invoke it!
-
-    # Pass in the function reference with the inputs schema to the executor.
-    execute_automate_function(automate_function, FunctionInputs)
-
-    # If the function has no arguments, the executor can handle it like so
-    # execute_automate_function(automate_function_without_inputs)
+    
+    # Pass in the function reference to the executor (no inputs needed)
+    execute_automate_function(automate_function)
