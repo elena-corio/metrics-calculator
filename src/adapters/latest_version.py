@@ -3,11 +3,13 @@ logging.basicConfig(level=logging.INFO)
 from config import PROJECT_ID, SOURCE_MODEL_ID
 from specklepy.api.client import SpeckleClient
 
-def get_latest_version(client: SpeckleClient):
+def get_latest_version(client: SpeckleClient, source_model_id=None, project_id=None):
     """
     Get the latest version of a speckle model. If no versions are found, print a message and return None.
     """
-    versions = client.version.get_versions(SOURCE_MODEL_ID, PROJECT_ID, limit=1)
+    source_model_id = source_model_id or SOURCE_MODEL_ID
+    project_id = project_id or PROJECT_ID
+    versions = client.version.get_versions(source_model_id, project_id, limit=1)
     if not versions.items:
         logging.warning("No versions found.")
         return

@@ -46,7 +46,7 @@ def test_receive_data_with_magicmock():
          patch("adapters.speckle_to_domain.speckle_to_unit", side_effect=lambda e: e.value + 6), \
          patch("adapters.speckle_to_domain.speckle_to_volume", side_effect=lambda e: e.value + 7):
         mock_version = MagicMock()
-        mock_version.referenced_object = "mock_object_id"
+        mock_version.referencedObject = "mock_object_id"
         mock_transport = MagicMock()
         model = receive_and_convert_data(mock_version, mock_transport)
         mock_receive.assert_called_once_with("mock_object_id", mock_transport)

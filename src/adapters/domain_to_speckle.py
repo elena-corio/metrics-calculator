@@ -2,13 +2,11 @@ import copy
 import logging
 logging.basicConfig(level=logging.INFO)
 from specklepy.api import operations
-from specklepy.objects.geometry import Point
+from specklepy.objects.base import Base
 from config import AUTHORS, FUNCTION, SOURCE_MODEL_ID
 from domain.metrics.all_metrics import calculate_metrics
-from domain.model.elements import Model, ModelElement
+from domain.model.elements import Model
 from domain.model.model_filter import filter_model
-
-from specklepy.objects.base import Base
 
 def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     """

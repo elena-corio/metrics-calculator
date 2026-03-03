@@ -30,7 +30,7 @@ def receive_and_convert_data(version, transport) -> Model:
     """
     Receive data from Speckle and convert it to domain model.
     """
-    data = operations.receive(version.referenced_object, transport)
+    data = operations.receive(version.referencedObject, transport)
 
     mapping = {
         "COLUMNS": speckle_to_column,
