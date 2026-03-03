@@ -29,8 +29,23 @@ def map_elements_by_collection(
 def receive_and_convert_data(version, transport) -> Model:
     """
     Receive data from Speckle and convert it to domain model.
+    
+    In production (Speckle Automate): version is already the loaded data object
+    In local testing: version is metadata with referenced_object attribute
     """
-    data = operations.receive(version.referencedObject, transport)
+    # Check if this is already the loaded data (production case)
+    if hasattr(version, 'elements') and not hasattr(version, 'referenced_object'):
+        # It's the actual data object (from automate_context.receive_version())
+        data = version
+    else:
+        # It's version metadata, fetch the actual data (local testing)
+        if hasattr(version, 'referenced_object'):
+            # Local: snake_case attribute
+            object_id = version.referenced_object
+        else:
+            raise ValueError("Version object has no referenced_object or referencedObject attribute")
+        
+        data = operations.receive(object_id, transport)
 
     mapping = {
         "COLUMNS": speckle_to_column,
