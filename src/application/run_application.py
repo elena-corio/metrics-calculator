@@ -9,17 +9,22 @@ from domain.rules.loader import load_rulebook
 from config import PROJECT_ID
 
 
-def run_application(automate_context=None, function_inputs=None, token=None):
+def run_application(automate_context=None, project_id=None, source_model_id=None, 
+                    target_model_id=None):
     """
     Main function to run the application.
     
     Args:
         automate_context: AutomationContext from Speckle Automate (preferred)
-        function_inputs: Function inputs from Speckle Automate
-        token: Optional token (not used when automate_context provided)
+        project_id: ID of the Speckle project (from FunctionInputs)
+        source_model_id: ID of the source model to analyze (from FunctionInputs)
+        target_model_id: ID of the target model for results (from FunctionInputs)
     """
     # Load the rulebook to calculate metrics
     rulebook = load_rulebook()
+    
+    # Use provided project_id or fall back to config default
+    current_project_id = project_id or PROJECT_ID
     
     # Use provided automate_context or create a standalone client
     if automate_context:
@@ -30,10 +35,10 @@ def run_application(automate_context=None, function_inputs=None, token=None):
     else:
         # Standalone mode (for local testing)
         client = get_client()
-        version = get_latest_version(client)
+        version = get_latest_version(client, source_model_id=source_model_id, project_id=current_project_id)
     
     # Create transport for the project
-    transport = ServerTransport(stream_id=PROJECT_ID, client=client)
+    transport = ServerTransport(stream_id=current_project_id, client=client)
     
     # Receive data, converting it to the domain model.
     domain_model = receive_and_convert_data(version, transport)
@@ -47,4 +52,4 @@ def run_application(automate_context=None, function_inputs=None, token=None):
     print(f"✓ Created and sent Speckle model with object ID: {object_id}")
     
     # Create a new version in target model 
-    create_version(client, object_id)
+    create_version(client, object_id, target_model_id)
