@@ -41,6 +41,7 @@ class CurveElement(ModelElement):
     
 @dataclass
 class Facade(MeshElement):
+    enclosed_volume: float
     pass
     
 @dataclass

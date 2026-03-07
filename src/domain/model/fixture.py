@@ -31,7 +31,7 @@ def make_core(cluster_id="A", level=0.0, section=SectionType.BOX, length=3.0, si
 		thickness=thickness
 	)
 
-def make_facade(cluster_id="A", level=0.0, area=50.0, thickness=0.05, material=MaterialType.GLASS):
+def make_facade(cluster_id="A", level=0.0, area=50.0, thickness=0.05, material=MaterialType.GLASS, volume=100):
 	return Facade(
 		cluster_id=cluster_id,
 		speckle_type="test_type",
@@ -39,7 +39,8 @@ def make_facade(cluster_id="A", level=0.0, area=50.0, thickness=0.05, material=M
 		level=level,
 		material=material,
 		area=area,
-		thickness=thickness
+		thickness=thickness,
+        enclosed_volume=volume  # Assuming volume is area * thickness for facade
 	)
  
 def make_open_space(cluster_id="A", level=0.0, area=100.0):
