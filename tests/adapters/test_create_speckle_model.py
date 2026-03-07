@@ -1,6 +1,7 @@
 import pytest
-from domain.model.fixture import make_model, make_volume
-from adapters.domain_to_speckle import create_base, create_element, model_to_speckle
+from domain.model.fixture import make_model, make_volume, make_unit
+from domain.model.types import ProgramType
+from adapters.domain_to_speckle import create_base, create_element, model_to_speckle, get_level_program
 from specklepy.objects.base import Base 
 
 @pytest.fixture
@@ -49,3 +50,46 @@ def test_model_to_speckle(sample_model):
     cluster_b = next(c for c in speckle_model.elements if c.name == "Cluster B")
     level_names_b = [e.name for e in cluster_b.elements]
     assert set(level_names_b) == {"Level 1"}
+
+
+def test_get_level_program_with_non_circulation_programs():
+    """Test that get_level_program returns a non-circulation program when available"""
+    units = [
+        make_unit(cluster_id="A", level=1, program=ProgramType.LIVING),
+        make_unit(cluster_id="A", level=1, program=ProgramType.WORKING),
+        make_unit(cluster_id="A", level=1, program=ProgramType.CIRCULATION)
+    ]
+    level_model = make_model(units=units)
+    program = get_level_program(level_model)
+    # Should return one of the non-circulation programs
+    assert program in ["Living", "Working"]
+    assert program != "Circulation"
+
+
+def test_get_level_program_with_only_circulation():
+    """Test that get_level_program returns 'Circulation' when all units are circulation"""
+    units = [
+        make_unit(cluster_id="A", level=1, program=ProgramType.CIRCULATION),
+        make_unit(cluster_id="A", level=1, program=ProgramType.CIRCULATION)
+    ]
+    level_model = make_model(units=units)
+    program = get_level_program(level_model)
+    assert program == "Circulation"
+
+
+def test_get_level_program_with_single_non_circulation():
+    """Test that get_level_program correctly returns a single non-circulation program"""
+    units = [
+        make_unit(cluster_id="A", level=1, program=ProgramType.LIVING),
+    ]
+    level_model = make_model(units=units)
+    program = get_level_program(level_model)
+    assert program == "Living"
+
+
+def test_get_level_program_with_empty_level():
+    """Test that get_level_program returns 'Circulation' for an empty level"""
+    level_model = make_model(units=[])
+    program = get_level_program(level_model)
+    assert program == "Circulation"
+

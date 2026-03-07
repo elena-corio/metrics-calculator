@@ -8,6 +8,14 @@ from domain.metrics.all_metrics import calculate_metrics
 from domain.model.elements import Model
 from domain.model.model_filter import filter_model
 
+def get_level_program(level_model: Model) -> str:
+    """
+    Determine the primary program for a level, excluding circulation.
+    """
+    programs = set(unit.program for unit in level_model.units)
+    non_circulation_programs = [p for p in programs if p != "Circulation"]
+    return non_circulation_programs[0] if non_circulation_programs else "Circulation"
+
 def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     """
     Create a Speckle Base object with the given name, model, and properties and empty elements list.
@@ -58,13 +66,14 @@ def model_to_speckle(model: Model, rulebook: dict):
         
         for level in levels:
             level_model = filter_model(cluster_model, lambda e: e.level == level)
+            level_programs = set(unit.program for unit in level_model.units)
             speckle_obj = next(iter(level_model.volumes), None).geometry  # Volumes represent geometry for the level
             logging.info(f"level_geometry: {speckle_obj}")
             level_geometry = create_element(
                 reference=speckle_obj, 
                 name=f"Level {level}", 
                 model=level_model, 
-                properties={"cluster_id": cluster_id, "level": level},
+                properties={"cluster_id": cluster_id, "level": level, "program": get_level_program(level_model)},
                 rulebook=rulebook
             )
             cluster_base.elements.append(level_geometry)
