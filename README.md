@@ -65,6 +65,12 @@ pylint --rcfile=pylintrc src
 pylint --rcfile=tests/pylintrc tests
 ```
 
+### Create a release
+```bash
+git tag v1.X.Y
+git push origin v1.X.Y
+```
+
 ## Docker Usage
 
 ### Build Docker image

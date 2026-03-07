@@ -14,8 +14,8 @@ def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     """
     base = Base()
     base.name = name
-    base["properties"] = properties
-    base["metrics"] = calculate_metrics(model, rulebook)
+    metrics = calculate_metrics(model, rulebook)
+    base["properties"] = properties | metrics
     base.elements = []
     return base
 
@@ -25,8 +25,8 @@ def create_element(reference: any, name: str, model: Model, properties: dict, ru
     """
     element = copy.deepcopy(reference)
     element.name = name
-    element["properties"] = properties
-    element["metrics"] = calculate_metrics(model, rulebook)
+    metrics = calculate_metrics(model, rulebook)
+    element["properties"] = properties | metrics
     return element
 
 def model_to_speckle(model: Model, rulebook: dict):

@@ -21,7 +21,7 @@ def test_create_base(sample_model):
     assert isinstance(base, Base)
     assert base.name == "TestBase"
     assert base["properties"]["foo"] == "bar"
-    assert isinstance(base["metrics"], dict)
+    assert isinstance(base["properties"], dict)
     assert base.elements == []
 
 def test_create_element(sample_model):
@@ -31,7 +31,7 @@ def test_create_element(sample_model):
     assert hasattr(result, "name")
     assert result.name == "TestElement"
     assert result["properties"]["baz"] == 42
-    assert isinstance(result["metrics"], dict)
+    assert isinstance(result["properties"], dict)
 
 def test_model_to_speckle(sample_model):
     speckle_model = model_to_speckle(sample_model, rulebook={})
