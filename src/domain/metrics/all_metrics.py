@@ -14,6 +14,7 @@ def calculate_metrics(model: Model, rulebook: dict) -> dict:
     Calculate metrics for the given model.
     """
     return {
+    "gross_floor_area": round(sum(slab.area for slab in model.slabs),2),
     "daylight_potential": round(calculate_daylight_potential(model.units, model.facades, rulebook),2),
     "green_space_index": round(calculate_green_space_index_avg(model.units, model.open_spaces, target=250.0),2),
     "program_diversity_index": round(calculate_program_diversity_index(model.units),2),
