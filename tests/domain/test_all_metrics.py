@@ -31,5 +31,4 @@ def test_calculate_metrics(sample_model):
     ]
     for key in expected_keys:
         assert key in metrics
-        assert "benchmark" in metrics[key]
-        assert "value" in metrics[key]
+        assert isinstance(metrics[key], (int, float))

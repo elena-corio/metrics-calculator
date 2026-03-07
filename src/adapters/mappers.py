@@ -47,7 +47,8 @@ def speckle_to_facade(speckle_obj) -> Facade:
         thickness=speckle_obj.properties["thickness"],
         area=round(speckle_obj.area, 2),
         speckle_type=speckle_obj.speckle_type,
-        geometry=speckle_obj
+        geometry=speckle_obj,
+        enclosed_volume=round(speckle_obj.properties["enclosed_volume"], 2)
     )
     
 def speckle_to_slab(speckle_obj) -> Slab:
