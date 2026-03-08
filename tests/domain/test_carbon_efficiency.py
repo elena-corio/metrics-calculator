@@ -3,10 +3,10 @@ import pytest
 from domain.metrics.area_helper import calculate_section_area
 from domain.model.types import MaterialType, SectionType
 from domain.model.fixture import make_core, make_facade, make_slab, make_column
-from domain.metrics.carbon_efficiency import (
+from domain.metrics.carbon_intensity import (
     calculate_volume,
     calculate_embodied_carbon,
-    calculate_carbon_efficiency,
+    calculate_carbon_intensity,
 )
 from loader import load_rulebook
 
@@ -61,7 +61,7 @@ def test_calculate_carbon_efficiency_normal():
     slabs = [make_slab(area=100, thickness=0.2, material=MaterialType.CONCRETE)]
     columns = [make_column(length=3, size=0.3, thickness=0.03, section=SectionType.CIRCLE, material=MaterialType.STEEL)]
     cores = [make_core(length=3, size=0.5, thickness=0.05, section=SectionType.BOX, material=MaterialType.CONCRETE)]
-    efficiency = calculate_carbon_efficiency(facades, slabs, columns, cores, RULEBOOK, target=600.0)
+    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK, target=600.0)
     assert 0 <= efficiency <= 1
 
 def test_calculate_carbon_efficiency_zero_gross_area():
@@ -69,7 +69,7 @@ def test_calculate_carbon_efficiency_zero_gross_area():
     slabs = []
     columns = [make_column(length=3, size=0.3, thickness=0.03, section=SectionType.CIRCLE, material=MaterialType.STEEL)]
     cores = []
-    efficiency = calculate_carbon_efficiency(facades, slabs, columns, cores, RULEBOOK, target=600.0)
+    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK, target=600.0)
     assert efficiency == 1  # embodied_carbon_intensity is 0
 
 def test_calculate_carbon_efficiency_high_embodied_carbon():
@@ -80,5 +80,5 @@ def test_calculate_carbon_efficiency_high_embodied_carbon():
     facades = []
     columns = []
     cores = []
-    efficiency = calculate_carbon_efficiency(facades, slabs, columns, cores, rulebook, target=600.0)
+    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, rulebook, target=600.0)
     assert efficiency == 0  # efficiency clamped to minimum 0

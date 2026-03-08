@@ -29,13 +29,13 @@ def calculate_embodied_carbon(element: ModelElement, rulebook: dict) -> float:
     return weight * carbon_factor
     
 
-def calculate_carbon_efficiency(facades: list[Facade], slabs: list[Slab], columns: list[Column], cores: list[Core], rulebook: dict, target) -> float:
+def calculate_carbon_intensity(facades: list[Facade], slabs: list[Slab], columns: list[Column], cores: list[Core], rulebook: dict) -> float:
     """
-    Calculate carbon efficiency as total embodied carbon per unit area.
+    Calculate carbon intensity as total embodied carbon per unit area.
     """
     gross_floor_area = sum(slab.area for slab in slabs)
     total_embodied_carbon = sum(calculate_embodied_carbon(element, rulebook) for element in facades + slabs + columns + cores)
     embodied_carbon_intensity = total_embodied_carbon / gross_floor_area if gross_floor_area > 0 else 0
-    return max(0, 1 - embodied_carbon_intensity / target)
+    return embodied_carbon_intensity
     
     

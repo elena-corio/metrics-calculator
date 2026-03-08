@@ -1,9 +1,9 @@
 import pytest
 from domain.model.fixture import make_unit, make_open_space
-from domain.metrics.green_space_index import (
+from domain.metrics.green_space_distance import (
 	get_distance_to_nearest_green,
 	calculate_green_space_index,
-	calculate_green_space_index_avg
+	calculate_green_space_distance_avg
 )
 
 def test_get_distance_to_nearest_green_none():
@@ -43,5 +43,5 @@ def test_calculate_green_space_index_avg():
 	target = 300.0
 	expected_scores = [1 - abs(u.level-4.5)/target for u in units]
 	expected = float(sum(expected_scores) / len(units))
-	actual = calculate_green_space_index_avg(units, greens, target)
+	actual = calculate_green_space_distance_avg(units, greens, target)
 	assert actual == pytest.approx(expected)
