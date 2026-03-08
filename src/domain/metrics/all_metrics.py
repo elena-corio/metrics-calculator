@@ -21,6 +21,6 @@ def calculate_metrics(model: Model, rulebook: dict) -> dict:
     "circulation_efficiency": round(calculate_circulation_efficiency(model.units),2),
     "usable_area_ratio": round(calculate_usable_area_ratio(model.units, rulebook),2),
     "net_floor_area_ratio": round(calculate_net_floor_area_ratio(model.columns, model.cores, model.slabs),2),
-    "volume_to_envelope_factor": round(calculate_volume_to_envelope(model.facades),2),
+    "volume_to_envelope": round(calculate_volume_to_envelope(model.facades),2),
     "carbon_intensity": round(calculate_carbon_intensity(model.facades, model.slabs, model.columns, model.cores, rulebook),2)
     }
