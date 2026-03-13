@@ -16,6 +16,7 @@ from speckle_automate import (
 
 from application.run_application import run_application
 from adapters.metric_model_setup import get_or_create_metrics_model
+from config import METRICS_MODEL_NAME
 
 
 def automate_function(
@@ -34,7 +35,8 @@ def automate_function(
         # Get or create the metrics model in the project
         target_model_id = get_or_create_metrics_model(
             client=automate_context.speckle_client,
-            project_id=automate_context.automation_run_data.project_id
+            project_id=automate_context.automation_run_data.project_id,
+            metrics_model_name=METRICS_MODEL_NAME
         )
         
         run_application(

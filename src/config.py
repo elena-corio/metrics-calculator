@@ -11,6 +11,7 @@ WORKSPACE_ID = os.getenv("SPECKLE_WORKSPACE_ID", "a1cd06bae2")
 PROJECT_ID = os.getenv("SPECKLE_PROJECT_ID", "dcca94731b")
 SOURCE_MODEL_ID = os.getenv("SPECKLE_SOURCE_MODEL_ID", "827526cd48")
 TARGET_MODEL_ID = os.getenv("SPECKLE_TARGET_MODEL_ID", "a17c364985")
+METRICS_MODEL_NAME = os.getenv("SPECKLE_METRICS_MODEL_NAME", "data/metrics")
 
 AUTHORS = ["Elena Corio, Symon Kipkemei"]
 FUNCTION = "digital-tissue-automate"

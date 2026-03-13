@@ -25,9 +25,23 @@ def test_project_id():
     """
     load_dotenv()
     project_id = os.getenv("SPECKLE_TEST_PROJECT_ID")
+    
     if not project_id:
         pytest.skip("SPECKLE_TEST_PROJECT_ID not set in .env file")
     return project_id
+
+
+@pytest.fixture(scope="module")
+def metrics_model_name():
+    """
+    Get the metrics model name from environment variables.
+    Set SPECKLE_TEST_METRICS_MODEL_NAME in your .env file.
+    Defaults to 'data/metrics-test' if not set.
+    """
+    model_name = os.getenv("SPECKLE_TEST_METRICS_MODEL_NAME")
+    if not model_name:
+        pytest.skip("SPECKLE_TEST_METRICS_MODEL_NAME not set in .env file")
+    return model_name
 
 
 def test_get_models_in_project_integration(speckle_client, test_project_id):
@@ -44,10 +58,10 @@ def test_get_models_in_project_integration(speckle_client, test_project_id):
         assert hasattr(models[0], 'name')
 
 
-def test_find_metrics_model_integration(speckle_client, test_project_id):
+def test_find_metrics_model_integration(speckle_client, test_project_id, metrics_model_name):
     """Integration test: Find metrics model in real project."""
     models = get_models_in_project(speckle_client, test_project_id)
-    result = find_metrics_model(models)
+    result = find_metrics_model(models, metrics_model_name)
     
     # Result should be either a string (model ID) or None
     assert result is None or isinstance(result, str)
@@ -57,7 +71,7 @@ def test_find_metrics_model_integration(speckle_client, test_project_id):
         assert len(result) > 0
 
 
-def test_get_or_create_metrics_model_integration(speckle_client, test_project_id):
+def test_get_or_create_metrics_model_integration(speckle_client, test_project_id, metrics_model_name):
     """
     Integration test: Get or create metrics model in real project.
     
@@ -66,7 +80,7 @@ def test_get_or_create_metrics_model_integration(speckle_client, test_project_id
     2. Create one if it doesn't exist
     3. On subsequent runs, find the one created in step 2
     """
-    result = get_or_create_metrics_model(speckle_client, test_project_id)
+    result = get_or_create_metrics_model(speckle_client, test_project_id, metrics_model_name)
     
     # Should return a valid model ID
     assert isinstance(result, str)
@@ -74,23 +88,24 @@ def test_get_or_create_metrics_model_integration(speckle_client, test_project_id
     
     # Verify the model actually exists by fetching it again
     models = get_models_in_project(speckle_client, test_project_id)
-    metrics_model_id = find_metrics_model(models)
+    metrics_model_id = find_metrics_model(models, metrics_model_name)
     
     assert metrics_model_id == result
     
-    # Verify the model has the correct name
+    # Verify the model has the correct name (exact match or ends with the base name)
     metrics_model = next((m for m in models if m.id == result), None)
     assert metrics_model is not None
-    assert metrics_model.name.lower() == "metrics"
+    base_name = metrics_model_name.split("/")[-1].lower()
+    assert metrics_model.name.lower() == metrics_model_name.lower() or metrics_model.name.lower().endswith(f"/{base_name}")
 
 
-def test_get_or_create_metrics_model_idempotent(speckle_client, test_project_id):
+def test_get_or_create_metrics_model_idempotent(speckle_client, test_project_id, metrics_model_name):
     """
     Integration test: Verify get_or_create is idempotent.
     
     Running it twice should return the same model ID.
     """
-    first_result = get_or_create_metrics_model(speckle_client, test_project_id)
-    second_result = get_or_create_metrics_model(speckle_client, test_project_id)
+    first_result = get_or_create_metrics_model(speckle_client, test_project_id, metrics_model_name)
+    second_result = get_or_create_metrics_model(speckle_client, test_project_id, metrics_model_name)
     
     assert first_result == second_result
