@@ -58,8 +58,8 @@ def automate_function(
     try:
         run_application(
             automate_context=automate_context,
-            project_id=function_inputs.project_id,
-            source_model_id=function_inputs.source_model_id,
+            project_id=automate_context.automation_run_data.project_id,
+            source_model_id=automate_context.automation_run_data.model_id,
             target_model_id=function_inputs.target_model_id
         )
         automate_context.mark_run_success("Metrics calculated and sent successfully.")
