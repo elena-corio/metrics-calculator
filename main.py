@@ -9,62 +9,52 @@ import os
 # Add src directory to Python path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from pydantic import Field
 from speckle_automate import (
-    AutomateBase,
     AutomationContext,
     execute_automate_function,
 )
 
 from application.run_application import run_application
-
-
-class FunctionInputs(AutomateBase):
-    """Input parameters for the metrics calculator function.
-    
-    These values are configured in the Speckle Automate UI.
-    """
-    
-    project_id: str = Field(
-        title="Project ID",
-        description="The ID of the Speckle project"
-    )
-    
-    source_model_id: str = Field(
-        title="Source Model ID",
-        description="The ID of the source model to fetch and analyze"
-    )
-    
-    target_model_id: str = Field(
-        title="Target Model ID",
-        description="The ID of the target model where results will be sent"
-    )
+from adapters.metric_model_setup import get_or_create_metrics_model
+from adapters.validators import ValidationResult
+from config import METRICS_MODEL_NAME
 
 
 def automate_function(
-    automate_context: AutomationContext,
-    function_inputs: FunctionInputs,
+    automate_context: AutomationContext
 ) -> None:
     """Speckle Automate function for calculating KPI metrics.
     
     Fetches a model, calculates KPIs (Daylight Potential, Green Space Index, 
-    Program Diversity, etc.), and sends results to a target model.
+    Program Diversity, etc.), and sends results to a dedicated 'metrics' model.
 
     Args:
         automate_context: A context-helper object that carries relevant information
-            about the runtime context of this function.
-        function_inputs: User-defined inputs containing source and target model IDs.
+            about the runtime context of this function, including project_id and model_id.
     """
     try:
-        run_application(
-            automate_context=automate_context,
-            project_id=function_inputs.project_id,
-            source_model_id=function_inputs.source_model_id,
-            target_model_id=function_inputs.target_model_id
+        # Get or create the metrics model in the project
+        target_model_id = get_or_create_metrics_model(
+            client=automate_context.speckle_client,
+            project_id=automate_context.automation_run_data.project_id,
+            metrics_model_name=METRICS_MODEL_NAME
         )
+        
+        result = run_application(
+            automate_context=automate_context,
+            project_id=automate_context.automation_run_data.project_id,
+            source_model_id=None,  # Not needed - automate_context.receive_version() handles this
+            target_model_id=target_model_id
+        )
+        
+        # Check if validation failed
+        if isinstance(result, ValidationResult) and not result.is_valid:
+            automate_context.mark_run_failed(result.message)
+            return
+        
         automate_context.mark_run_success("Metrics calculated and sent successfully.")
     except Exception as e:
-        automate_context.mark_run_failed(f"Error calculating metrics: {str(e)}")
+        automate_context.mark_run_failed(f"Unexpected error: {str(e)}")
         raise
 
 
@@ -72,5 +62,5 @@ def automate_function(
 if __name__ == "__main__":
     # NOTE: always pass in the automate function by its reference; do not invoke it!
     
-    # Pass in the function reference with the inputs schema to the executor
-    execute_automate_function(automate_function, FunctionInputs)
+    # Pass in the function reference to the executor
+    execute_automate_function(automate_function)
