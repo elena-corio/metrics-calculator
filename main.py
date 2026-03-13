@@ -16,6 +16,7 @@ from speckle_automate import (
 
 from application.run_application import run_application
 from adapters.metric_model_setup import get_or_create_metrics_model
+from adapters.validators import ValidationResult
 from config import METRICS_MODEL_NAME
 
 
@@ -39,15 +40,24 @@ def automate_function(
             metrics_model_name=METRICS_MODEL_NAME
         )
         
-        run_application(
+        result = run_application(
             automate_context=automate_context,
             project_id=automate_context.automation_run_data.project_id,
             source_model_id=automate_context.automation_run_data.model_id,
             target_model_id=target_model_id
         )
+        
+        # Check if validation failed
+        if isinstance(result, ValidationResult) and not result.is_valid:
+            automate_context.mark_run_failed(
+                status_message=result.message,
+                results=result.to_dict()
+            )
+            return
+        
         automate_context.mark_run_success("Metrics calculated and sent successfully.")
     except Exception as e:
-        automate_context.mark_run_failed(f"Error calculating metrics: {str(e)}")
+        automate_context.mark_run_failed(f"Unexpected error: {str(e)}")
         raise
 
 

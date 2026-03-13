@@ -5,8 +5,9 @@ from adapters.new_version import create_version
 from adapters.latest_version import get_latest_version
 from adapters.speckle_to_domain import receive_and_convert_data
 from adapters.speckle_client import get_client
+from adapters.validators import validate_model_structure, ValidationResult
 from domain.rules.loader import load_rulebook
-from config import PROJECT_ID
+from config import PROJECT_ID, REQUIRED_COLLECTIONS, COLLECTION_PROPERTY_REQUIREMENTS
 
 
 def run_application(automate_context=None, project_id=None, source_model_id=None, 
@@ -39,6 +40,16 @@ def run_application(automate_context=None, project_id=None, source_model_id=None
     
     # Create transport for the project
     transport = ServerTransport(stream_id=current_project_id, client=client)
+    
+    # Validate model structure before conversion
+    validation_result = validate_model_structure(
+        version,
+        REQUIRED_COLLECTIONS,
+        COLLECTION_PROPERTY_REQUIREMENTS
+    )
+    
+    if not validation_result.is_valid:
+        return validation_result
     
     # Receive data, converting it to the domain model.
     domain_model = receive_and_convert_data(version, transport)
