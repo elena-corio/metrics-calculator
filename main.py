@@ -33,6 +33,10 @@ def automate_function(
             about the runtime context of this function, including project_id and model_id.
     """
     try:
+        # Debug: Log available attributes
+        print(f"AutomationRunData attributes: {dir(automate_context.automation_run_data)}")
+        print(f"AutomationRunData dict: {automate_context.automation_run_data.model_dump() if hasattr(automate_context.automation_run_data, 'model_dump') else 'N/A'}")
+        
         # Get or create the metrics model in the project
         target_model_id = get_or_create_metrics_model(
             client=automate_context.speckle_client,
@@ -40,10 +44,18 @@ def automate_function(
             metrics_model_name=METRICS_MODEL_NAME
         )
         
+        # Try to get model_id - use branch_name as fallback since it represents the model
+        source_model_id = None
+        if hasattr(automate_context.automation_run_data, 'model_id'):
+            source_model_id = automate_context.automation_run_data.model_id
+        elif hasattr(automate_context.automation_run_data, 'branch_name'):
+            # branch_name is the model in newer API versions
+            print(f"Using branch_name as model identifier: {automate_context.automation_run_data.branch_name}")
+        
         result = run_application(
             automate_context=automate_context,
             project_id=automate_context.automation_run_data.project_id,
-            source_model_id=automate_context.automation_run_data.model_id,
+            source_model_id=source_model_id,  # Will be None - automate_context.receive_version() handles this
             target_model_id=target_model_id
         )
         
