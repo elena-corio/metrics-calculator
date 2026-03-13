@@ -15,3 +15,19 @@ METRICS_MODEL_NAME = os.getenv("SPECKLE_METRICS_MODEL_NAME", "data/metrics")
 
 AUTHORS = ["Elena Corio, Symon Kipkemei"]
 FUNCTION = "digital-tissue-automate"
+
+# Validation Configuration
+REQUIRED_COLLECTIONS = [
+    "COLUMNS", "CORES", "FACADES", 
+    "OPEN_SPACES", "SLABS", "UNITS", "VOLUMES"
+]
+
+COLLECTION_PROPERTY_REQUIREMENTS = {
+    "COLUMNS": ["cluster_id", "level", "material", "section", "size", "thickness"],
+    "CORES": ["cluster_id", "level", "material", "section", "size", "thickness"],
+    "FACADES": ["cluster_id", "level", "material", "thickness", "enclosed_volume"],
+    "SLABS": ["cluster_id", "level", "material", "thickness"],
+    "UNITS": ["cluster_id", "level", "program"],
+    "OPEN_SPACES": ["cluster_id", "level"],
+    "VOLUMES": ["cluster_id", "level"],
+}
