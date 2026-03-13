@@ -16,7 +16,7 @@ def calculate_metrics(model: Model, rulebook: dict) -> dict:
     return {
     "gross_floor_area": round(sum(slab.area for slab in model.slabs),2),
     "daylight_potential": round(calculate_daylight_potential(model.units, model.facades, rulebook),2),
-    "green_space_distance": round(calculate_green_space_distance_avg(model.units, model.open_spaces, target=250.0),2),
+    "green_space_distance": round(calculate_green_space_distance_avg(model.units, model.open_spaces),2),
     "program_diversity_index": round(calculate_program_diversity_index(model.units),2),
     "circulation_efficiency": round(calculate_circulation_efficiency(model.units),2),
     "usable_area_ratio": round(calculate_usable_area_ratio(model.units, rulebook),2),

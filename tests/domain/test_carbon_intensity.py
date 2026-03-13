@@ -56,23 +56,23 @@ def test_calculate_embodied_carbon_missing_material():
     slab = make_slab(area=10, thickness=0.2, material=MaterialType.CONCRETE)
     assert calculate_embodied_carbon(slab, RULEBOOK) == 0  # Should return 0 for unknown material
 
-def test_calculate_carbon_efficiency_normal():
+def test_calculate_carbon_intensity_normal():
     facades = [make_facade(area=20, thickness=0.1, material=MaterialType.GLASS)]
     slabs = [make_slab(area=100, thickness=0.2, material=MaterialType.CONCRETE)]
     columns = [make_column(length=3, size=0.3, thickness=0.03, section=SectionType.CIRCLE, material=MaterialType.STEEL)]
     cores = [make_core(length=3, size=0.5, thickness=0.05, section=SectionType.BOX, material=MaterialType.CONCRETE)]
-    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK, target=600.0)
-    assert 0 <= efficiency <= 1
+    actual = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK)
+    assert actual <= 100.0
 
-def test_calculate_carbon_efficiency_zero_gross_area():
+def test_calculate_carbon_intensity_zero_gross_area():
     facades = [make_facade(area=20, thickness=0.1, material=MaterialType.GLASS)]
     slabs = []
     columns = [make_column(length=3, size=0.3, thickness=0.03, section=SectionType.CIRCLE, material=MaterialType.STEEL)]
     cores = []
-    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK, target=600.0)
-    assert efficiency == 1  # embodied_carbon_intensity is 0
+    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, RULEBOOK)
+    assert efficiency == 0  # embodied_carbon_intensity is 0
 
-def test_calculate_carbon_efficiency_high_embodied_carbon():
+def test_calculate_carbon_intensity_high_embodied_carbon():
     slabs = [make_slab(area=100, thickness=0.2, material=MaterialType.CONCRETE)]
     # artificially high carbon factor in rulebook
     rulebook = load_rulebook()
@@ -80,5 +80,5 @@ def test_calculate_carbon_efficiency_high_embodied_carbon():
     facades = []
     columns = []
     cores = []
-    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, rulebook, target=600.0)
-    assert efficiency == 0  # efficiency clamped to minimum 0
+    efficiency = calculate_carbon_intensity(facades, slabs, columns, cores, rulebook)
+    assert efficiency ==  480000.0
