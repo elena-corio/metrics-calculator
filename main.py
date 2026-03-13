@@ -15,6 +15,7 @@ from speckle_automate import (
 )
 
 from application.run_application import run_application
+from adapters.metric_model_setup import get_or_create_metrics_model
 
 
 def automate_function(
@@ -23,18 +24,24 @@ def automate_function(
     """Speckle Automate function for calculating KPI metrics.
     
     Fetches a model, calculates KPIs (Daylight Potential, Green Space Index, 
-    Program Diversity, etc.), and sends results to the same model.
+    Program Diversity, etc.), and sends results to a dedicated 'metrics' model.
 
     Args:
         automate_context: A context-helper object that carries relevant information
             about the runtime context of this function, including project_id and model_id.
     """
     try:
+        # Get or create the metrics model in the project
+        target_model_id = get_or_create_metrics_model(
+            client=automate_context.speckle_client,
+            project_id=automate_context.automation_run_data.project_id
+        )
+        
         run_application(
             automate_context=automate_context,
             project_id=automate_context.automation_run_data.project_id,
             source_model_id=automate_context.automation_run_data.model_id,
-            target_model_id=automate_context.automation_run_data.model_id
+            target_model_id=target_model_id
         )
         automate_context.mark_run_success("Metrics calculated and sent successfully.")
     except Exception as e:
