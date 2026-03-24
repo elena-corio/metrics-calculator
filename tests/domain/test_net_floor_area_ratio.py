@@ -41,3 +41,14 @@ def test_calculate_net_floor_area_ratio_no_structural_elements():
     slabs = [make_slab(area=100)]
     ratio = calculate_net_floor_area_ratio(columns, cores, slabs)
     assert ratio == 1
+
+def test_net_floor_area_ratio_large_columns():
+    from domain.model.types import SectionType
+    from domain.model.fixture import make_column, make_slab
+    columns = [make_column(section=SectionType.CIRCLE, size=5.0, thickness=2.5) for _ in range(5)]
+    cores = []
+    slabs = [make_slab(area=600)]
+    from domain.metrics.net_floor_area_ratio import calculate_net_floor_area_ratio
+    ratio = calculate_net_floor_area_ratio(columns, cores, slabs)
+    expected_ratio = 0.8363753826255317  # Calculated with 5 columns, each area ≈ 19.634954084936208
+    assert abs(ratio - expected_ratio) < 1e-6, f"Expected {expected_ratio}, got {ratio}"
