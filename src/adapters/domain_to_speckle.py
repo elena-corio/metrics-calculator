@@ -4,17 +4,20 @@ logging.basicConfig(level=logging.INFO)
 from specklepy.api import operations
 from specklepy.objects.base import Base
 from config import AUTHORS, FUNCTION, SOURCE_MODEL_ID
-from domain.metrics.all_metrics import calculate_metrics
+from domain.metrics.all_metrics import calculate_material_breakdown, calculate_metrics
+from domain.model.types import ProgramType
 from domain.model.elements import Model
 from domain.model.model_filter import filter_model, filter_model_no_support
 
-def get_level_program(level_model: Model) -> str:
+def get_level_program(level_model: Model) -> ProgramType:
     """
-    Determine the primary program for a level, excluding circulation.
+    Determine the primary program for a level, excluding circulation. Returns ProgramType enum.
     """
     programs = set(unit.program for unit in level_model.units)
-    non_circulation_programs = [p for p in programs if p != "Circulation"]
-    return non_circulation_programs[0] if non_circulation_programs else "Circulation"
+    # Convert all to ProgramType for safety
+    programs = set(ProgramType(p) if not isinstance(p, ProgramType) else p for p in programs)
+    non_circulation_programs = [p for p in programs if p != ProgramType.CIRCULATION]
+    return non_circulation_programs[0] if non_circulation_programs else ProgramType.CIRCULATION
 
 def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     """
@@ -25,8 +28,8 @@ def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     base.name = name
     filtered_model = filter_model_no_support(model)
     metrics = calculate_metrics(model, filtered_model, rulebook)
-    #materials = calculate_material_breakdown(model)
-    base["properties"] = properties | metrics 
+    materials = calculate_material_breakdown(model)
+    base["properties"] = properties | metrics | materials 
     base.elements = []
     return base
 
@@ -38,8 +41,8 @@ def create_element(reference: any, name: str, model: Model, properties: dict, ru
     element.name = name
     # For element-level metrics, we use the full model since we want to include levels with SUPPORT program 
     metrics = calculate_metrics(model, model, rulebook)
-    #materials = calculate_material_breakdown(model)
-    element["properties"] = properties | metrics 
+    materials = calculate_material_breakdown(model)
+    element["properties"] = properties | metrics | materials
     return element
 
 def model_to_speckle(model: Model, rulebook: dict):

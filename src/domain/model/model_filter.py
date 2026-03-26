@@ -12,7 +12,7 @@ def filter_model_no_support(model):
     non_support_levels = set()
     for lvl in levels:
         level_model = filter_model(model, lambda e: getattr(e, 'level', None) == lvl)
-        if get_level_program(level_model) != ProgramType.SUPPORT:
+        if get_level_program(level_model.units) != ProgramType.SUPPORT:
             non_support_levels.add(lvl)
     # If all levels are SUPPORT, return original model
     if not non_support_levels:
