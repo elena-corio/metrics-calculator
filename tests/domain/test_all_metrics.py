@@ -17,7 +17,7 @@ def sample_model():
 RULEBOOK = load_rulebook()
 
 def test_calculate_metrics(sample_model):
-    metrics = calculate_metrics(sample_model, RULEBOOK)
+    metrics = calculate_metrics(sample_model, sample_model, RULEBOOK)
     assert isinstance(metrics, dict)
     expected_keys = [
         "daylight_potential",

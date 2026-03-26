@@ -4,7 +4,7 @@ logging.basicConfig(level=logging.INFO)
 from specklepy.api import operations
 from specklepy.objects.base import Base
 from config import AUTHORS, FUNCTION, SOURCE_MODEL_ID
-from domain.metrics.all_metrics import calculate_material_breakdown, calculate_metrics
+from domain.metrics.all_metrics import calculate_metrics
 from domain.model.elements import Model
 from domain.model.model_filter import filter_model, filter_model_no_support
 
@@ -25,8 +25,8 @@ def create_base(name: str, model: Model, properties: dict, rulebook: dict):
     base.name = name
     filtered_model = filter_model_no_support(model)
     metrics = calculate_metrics(model, filtered_model, rulebook)
-    materials = calculate_material_breakdown(model)
-    base["properties"] = properties | metrics | materials
+    #materials = calculate_material_breakdown(model)
+    base["properties"] = properties | metrics 
     base.elements = []
     return base
 
@@ -38,8 +38,8 @@ def create_element(reference: any, name: str, model: Model, properties: dict, ru
     element.name = name
     # For element-level metrics, we use the full model since we want to include levels with SUPPORT program 
     metrics = calculate_metrics(model, model, rulebook)
-    materials = calculate_material_breakdown(model)
-    element["properties"] = properties | metrics | materials
+    #materials = calculate_material_breakdown(model)
+    element["properties"] = properties | metrics 
     return element
 
 def model_to_speckle(model: Model, rulebook: dict):

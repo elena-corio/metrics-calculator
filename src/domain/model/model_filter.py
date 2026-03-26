@@ -18,7 +18,11 @@ def filter_model_no_support(model):
     if not non_support_levels:
         return model
     # Otherwise, filter elements by non-support levels
-    return filter_model(model, lambda e: getattr(e, 'level', None) in non_support_levels)
+    filtered = filter_model(model, lambda e: getattr(e, 'level', None) in non_support_levels)
+    # Safety: if filtering removes all units/elements, return original model
+    if not filtered.units or all(len(getattr(filtered, attr, [])) == 0 for attr in ['units','slabs','facades','columns','cores','volumes']):
+        return model
+    return filtered
 
 
 

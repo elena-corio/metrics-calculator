@@ -8,9 +8,7 @@ from domain.metrics.usable_area_ratio import calculate_usable_area_ratio
 from domain.metrics.volume_to_envelope import calculate_volume_to_envelope
 from domain.model.elements import Model
 from domain.metrics.carbon_intensity import calculate_volume
-
-from domain.model.types import ProgramType
-
+from collections import defaultdict
 
 def calculate_metrics(model: Model, filtered_model: Model, rulebook: dict) -> dict:
     """
@@ -39,7 +37,6 @@ def calculate_material_breakdown(model: Model) -> dict:
     Returns a dictionary mapping material (lowercase string) to total volume for all elements in the model.
     Only elements with a 'material' attribute are considered.
     """
-    from collections import defaultdict
     material_volumes = defaultdict(float)
     # Gather all elements with a material attribute
     elements = model.facades + model.slabs + model.columns + model.cores

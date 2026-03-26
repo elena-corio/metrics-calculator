@@ -16,5 +16,16 @@
     "Timber": { "is_transparent": false, "density": 500, "carbon_factor": 0.5 },
     "Glass": { "is_transparent": true, "density": 2500, "carbon_factor": 1.6 },
     "Plastic": { "is_transparent": false, "density": 1200, "carbon_factor": 2.5 }
-  }
+  },
+    "metrics": {
+    "gross_floor_area": {"include_support": true},
+    "daylight_potential": {"include_support": false},
+    "green_space_distance": {"include_support": false},
+    "program_diversity_index": {"include_support": true},
+    "circulation_efficiency": {"include_support": false},
+    "usable_area_ratio": {"include_support": false},
+    "net_floor_area_ratio": {"include_support": true},
+    "volume_to_envelope": {"include_support": false},
+    "carbon_intensity": {"include_support": true}
+    }
 }
