@@ -1,14 +1,14 @@
 """
 Calculate net floor area ratio given lists of structural elements.
 """
-from domain.metrics.area_helper import calculate_section_area
+from domain.metrics.area_helper import calculate_section_bulk
 from domain.model.elements import Column, Core, CurveElement, Slab
 
 def calculate_structural_area(elements: list[CurveElement]) -> float:
     """
     Calculate total area of vertical structural elements (columns and cores).
     """
-    return sum(calculate_section_area(element) for element in elements)
+    return sum(calculate_section_bulk(element) for element in elements)
 
 def calculate_net_floor_area_ratio(columns: list[Column], cores: list[Core], slabs: list[Slab]) -> float:
     """

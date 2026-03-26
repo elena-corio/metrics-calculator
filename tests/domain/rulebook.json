@@ -1,14 +1,14 @@
 {
   "program_types": {
-    "Living": { "is_green": false, "is_usable": true },
-    "Working": { "is_green": false, "is_usable": true },
-    "Learning": { "is_green": false, "is_usable": true },
-    "Commerce": { "is_green": false, "is_usable": true },
-    "Leisure": { "is_green": false, "is_usable": true },
-    "Health": { "is_green": false, "is_usable": true },
-    "Community": { "is_green": true, "is_usable": true },
-    "Circulation": { "is_green": false, "is_usable": false},
-    "Support": { "is_green": false, "is_usable": false }
+    "Living": { "is_green": false, "is_usable": true, "glazed": 0.7 },
+    "Working": { "is_green": false, "is_usable": true, "glazed": 0.8 },
+    "Learning": { "is_green": false, "is_usable": true, "glazed": 0.7 },
+    "Commerce": { "is_green": false, "is_usable": true, "glazed": 1.0 },
+    "Leisure": { "is_green": false, "is_usable": true, "glazed": 0.8 },
+    "Health": { "is_green": false, "is_usable": true, "glazed": 0.7 },
+    "Community": { "is_green": true, "is_usable": true , "glazed": 0.7},
+    "Circulation": { "is_green": false, "is_usable": false, "glazed": 0.0},
+    "Support": { "is_green": false, "is_usable": false, "glazed": 0.0 }
   },
   "material_types": {
     "Concrete": { "is_transparent": false, "density": 2400, "carbon_factor": 0.12 },

@@ -25,11 +25,32 @@ def calculate_program_frequencies(program_counts: dict[str, int]) -> int:
 
 def calculate_program_diversity_index(units: list[Unit]) -> float:
     """
-    Calculate the program diversity index for a list of units.
+    Calculate the average program diversity index for units, chunked by every 15 levels.
+    Each chunk contains all units whose level falls within a 15-level window (0-14, 15-29, etc).
+    Returns the average diversity index across all non-empty chunks.
     """
-    program_counts = count_programs(units)
-    total_units = len(units)
-    if total_units == 0:
+    if not units:
         return 0.0
-    program_frequencies = calculate_program_frequencies(program_counts)
-    return 1 - (program_frequencies / (total_units ** 2))
+
+    # Group units by 15-level chunks
+    from collections import defaultdict
+    chunks = defaultdict(list)
+    for unit in units:
+        # Integer division to determine the chunk index
+        chunk_idx = int(unit.level) // 15
+        chunks[chunk_idx].append(unit)
+
+    # Calculate diversity index for each chunk
+    indices = []
+    for chunk_units in chunks.values():
+        program_counts = count_programs(chunk_units)
+        total_units = len(chunk_units)
+        if total_units == 0:
+            continue
+        program_frequencies = calculate_program_frequencies(program_counts)
+        index = 1 - (program_frequencies / (total_units ** 2))
+        indices.append(index)
+
+    if not indices:
+        return 0.0
+    return sum(indices) / len(indices)

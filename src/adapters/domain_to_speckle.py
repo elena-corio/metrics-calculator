@@ -66,7 +66,6 @@ def model_to_speckle(model: Model, rulebook: dict):
         
         for level in levels:
             level_model = filter_model(cluster_model, lambda e: e.level == level)
-            level_programs = set(unit.program for unit in level_model.units)
             speckle_obj = next(iter(level_model.volumes), None).geometry  # Volumes represent geometry for the level
             logging.info(f"level_geometry: {speckle_obj}")
             level_geometry = create_element(
