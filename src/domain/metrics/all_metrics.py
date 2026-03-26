@@ -45,4 +45,4 @@ def calculate_material_breakdown(model: Model) -> dict:
         if material is not None:
             material_name = str(material).lower()
             material_volumes[material_name] += calculate_volume(element)
-    return dict(material_volumes)
+    return {k: round(v, 2) for k, v in material_volumes.items()}
